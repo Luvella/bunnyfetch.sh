@@ -1,7 +1,6 @@
 #!/bin/bash
 # Tiny colored fetch script
-# Requires Typicons Font to display the icons
-# elenapan @ github
+# elenapan @ github & TorchedSammy
 
 f=3 b=4
 for j in f b; do
