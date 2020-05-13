@@ -5,16 +5,13 @@
 # (\ /)
 # ( · ·)
 # c(")(")
-
-f=3 b=4
-for j in f b; do
+c=3 b=4
+for j in c b; do
   for i in {0..7}; do
     printf -v $j$i %b "\e[${!j}${i}m"
   done
 done
-d=$'\e[1m'
-t=$'\e[0m'
-v=$'\e[7m'
+r=$'\e[0m'
 
 # Items
 title() {
@@ -27,11 +24,11 @@ title() {
 
 bunny() {
 cat << EOF
-	    $(eval title)
+	    $c1$(eval title)$r
 
    (\ /)
-   ( $d. .)
-   c($f1"$t)($f1"$t)
+   ( . .)
+   c($f1"$r)($f1"$r)
 EOF
 }
 
