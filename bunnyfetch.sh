@@ -5,6 +5,7 @@
 # (\ /)
 # ( · ·)
 # c(")(")
+
 c=3 b=4
 for j in c b; do
   for i in {0..7}; do
@@ -15,7 +16,7 @@ r=$'\e[0m'
 
 # Items
 title() {
-	echo "$USERNAME@$HOSTNAME "
+	echo "$USERNAME@$HOSTNAME"
 }
 
 # (\ /)
@@ -24,11 +25,11 @@ title() {
 
 bunny() {
 cat << EOF
-	    $c1$(eval title)$r
+	    $c1$(title)$r
 
    (\ /)
    ( . .)
-   c($f1"$r)($f1"$r)
+   c($c1"$r)($c1"$r)
 EOF
 }
 
