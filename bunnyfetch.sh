@@ -16,9 +16,20 @@ r=$'\e[0m'
 
 # Items
 title() {
-	echo "$USERNAME@$HOSTNAME"
+	printf "$USERNAME@$HOSTNAME"
 }
 
+os() {
+	case "$(uname -s)" in
+		CYGWIN*|MSYS*|MINGW*)
+            printf "$(wmic os get Caption | grep Windows)"
+        ;;
+
+        *)
+			exit 1
+		;;
+	esac
+}
 # (\ /)
 # ( . .)
 # c(")(")
@@ -26,7 +37,7 @@ title() {
 bunny() {
 cat << EOF
 	    $c1$(title)$r
-
+	    OS: $(os)
    (\ /)
    ( . .)
    c($c1"$r)($c1"$r)
