@@ -13,7 +13,13 @@ for j in c b; do
   done
 done
 r=$'\e[0m'
+v=$'\e[7m'
 
+colors() {
+	for i in {0..7}; do
+    	printf "\e[4${i}m   "
+	done
+}
 # Items
 title() {
 	printf "$USERNAME@$HOSTNAME"
@@ -21,13 +27,11 @@ title() {
 
 os() {
 	case "$(uname -s)" in
-		CYGWIN*|MSYS*|MINGW*)
-            printf "$(wmic os get Caption | grep Windows)"
-        ;;
+		CYGWIN*|MSYS*|MINGW*) wmic os get Caption | grep Windows ;;
 
-        *)
-			exit 1
-		;;
+        Linux*) uname -s ;;
+
+        *) exit 1 ;;
 	esac
 }
 # (\ /)
@@ -37,10 +41,12 @@ os() {
 bunny() {
 cat << EOF
 	    $c1$(title)$r
-	    OS: $(os)
+	   $c2 OS $r$(os)
    (\ /)
    ( . .)
    c($c1"$r)($c1"$r)
+	    $(colors)$r
+
 EOF
 }
 
