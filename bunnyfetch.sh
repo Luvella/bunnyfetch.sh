@@ -70,9 +70,29 @@ kernelv() {
 }
 
 de() {
-	printf d
+	case $osn in
+		Windows)
+			case $(os) in
+				*"Windows 8"*) printf Metro ;;
+				*) printf Aero ;;
+			esac
+		;;
+	esac
 }
 
+wm() {
+	case $osn in
+		Windows)
+			wmn=$(tasklist | grep -m 2 -o -F \
+				-e bugn \
+				-e Windawesome \
+				-e blackbox \
+				-e litestep )
+			[[ $wmn == "blackbox" ]] && wmn="bbLean"
+			echo ${wmn:+$wmn, }Explorer
+		;;
+	esac
+}
 # (\ /)
 # ( . .)
 # c(")(")
@@ -82,8 +102,9 @@ cat << EOF
 	    $c1$(title)$r
 	   $c2 OS $r$(os)
    (\ /)   $c3 Kernel $r$(kernelv)
-   ( . .)
-   c($c1"$r)($c1"$r)
+   ( . .)  $c4 DE $r$(de)
+   c($c1"$r)($c1"$r) $c5 WM $r$(wm)
+
 	    $(colors)$r
 	    $(colors z)$r
 	    
