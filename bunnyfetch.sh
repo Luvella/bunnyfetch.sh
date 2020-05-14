@@ -28,20 +28,39 @@ colors() {
 		done
 	fi
 }
+
 # Items
 title() {
 	printf "$USERNAME@$HOSTNAME"
 }
 
 os() {
-	case "$(uname -s)" in
-		CYGWIN*|MSYS*|MINGW*) wmic os get Caption | grep Windows ;;
+	case $(uname -s) in
+		CYGWIN*|MSYS*|MINGW*)
+			export osn=Windows
+			wmic os get Caption | grep Windows
+		;;
 
-        Linux*) uname -s ;;
+        Linux*)
+			uname -s
+		;;
 
         *) exit 1 ;;
 	esac
 }
+
+kernelv() {
+	case $(os) in
+		Microsoft*)
+			wmic os get Version | grep -E '[[:digit:]]'
+		;;
+
+		Linux*)
+			uname -r
+		;;
+	esac
+}
+
 # (\ /)
 # ( . .)
 # c(")(")
@@ -50,7 +69,7 @@ bunny() {
 cat << EOF
 	    $c1$(title)$r
 	   $c2 OS $r$(os)
-   (\ /)
+   (\ /)   $c3 Kernel $r$(kernelv)
    ( . .)
    c($c1"$r)($c1"$r)
 	    $(colors)$r
