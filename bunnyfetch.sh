@@ -6,19 +6,27 @@
 # ( · ·)
 # c(")(")
 
-c=3 b=4
-for j in c b; do
+c=3 cb=4
+for j in c cb; do
   for i in {0..7}; do
     printf -v $j$i %b "\e[${!j}${i}m"
   done
 done
-r=$'\e[0m'
-v=$'\e[7m'
+
+r=$'\e[0m' # Color reset
+v=$'\e[7m' # Color invert
+b=$'\e[1m' # Bold colors
 
 colors() {
-	for i in {0..7}; do
-    	printf "\e[4${i}m   "
-	done
+	if [ $1 ]; then
+		for i in {0..7}; do
+			printf "\e[10${i}m   "
+		done
+	else
+		for i in {0..7}; do
+			printf "\e[4${i}m   "
+		done
+	fi
 }
 # Items
 title() {
@@ -46,7 +54,8 @@ cat << EOF
    ( . .)
    c($c1"$r)($c1"$r)
 	    $(colors)$r
-
+	    $(colors z)$r
+	    
 EOF
 }
 
