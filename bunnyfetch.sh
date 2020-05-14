@@ -29,29 +29,37 @@ colors() {
 	fi
 }
 
+get_os() {
+	case $(uname -s) in
+		CYGWIN*|MINGW*|MSYS*) osn=Windows ;;
+		Linux*) osn=Linux ;;
+		*)
+			printf "OS not supported, goodbye."
+			exit 1
+		;;
+	esac
+}
+
 # Items
 title() {
 	printf "$USERNAME@$HOSTNAME"
 }
 
 os() {
-	case $(uname -s) in
-		CYGWIN*|MSYS*|MINGW*)
-			export osn=Windows
+	case $osn in
+		Windows)
 			wmic os get Caption | grep Windows
 		;;
 
-        Linux*)
+        Linux)
 			uname -s
 		;;
-
-        *) exit 1 ;;
 	esac
 }
 
 kernelv() {
-	case $(os) in
-		Microsoft*)
+	case $osn in
+		Windows)
 			wmic os get Version | grep -E '[[:digit:]]'
 		;;
 
@@ -59,6 +67,10 @@ kernelv() {
 			uname -r
 		;;
 	esac
+}
+
+de() {
+	printf d
 }
 
 # (\ /)
@@ -78,4 +90,5 @@ cat << EOF
 EOF
 }
 
+get_os # Initially get the os for other functions
 bunny
