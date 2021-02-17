@@ -1,10 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 # Tiny colored fetch script
-# Idea by elenapan, fixed and refactored by TorchedSammy
-
-# (\ /)
-# ( · ·)
-# c(")(")
+# Requires Typicons Font to display the icons
+# elenapan @ github
+# Modified by TorchedSammy
 
 c=3 cb=4
 for j in c cb; do
@@ -13,107 +11,49 @@ for j in c cb; do
   done
 done
 
-r=$'\e[0m' # Color reset
-v=$'\e[7m' # Color invert
-b=$'\e[1m' # Bold colors
+r=$'\e[0m'
+v=$'\e[7m'
+b=$'\e[1m'
 
 colors() {
-	if [ $1 ]; then
-		for i in {0..7}; do
-			printf "\e[10${i}m   "
-		done
-	else
-		for i in {0..7}; do
-			printf "\e[4${i}m   "
-		done
-	fi
+        if [ $1 ]; then
+                for i in {0..7}; do
+                        printf "\e[10${i}m   "
+                done
+        else
+                for i in {0..7}; do
+                        printf "\e[4${i}m   "
+                done
+        fi
 }
 
-get_os() {
-	case $(uname -s) in
-		CYGWIN*|MINGW*|MSYS*) osn=Windows ;;
-		Linux*) osn=Linux ;;
-		*)
-			printf "OS not supported, goodbye."
-			exit 1
-		;;
-	esac
-}
-
+title="$USER@$HOSTNAME"
 # Items
-title() {
-	printf "$USERNAME@$HOSTNAME"
-}
+sep=
+s=$d$f0$sep$t
 
-os() {
-	case $osn in
-		Windows)
-			wmic os get Caption | grep Windows
-		;;
+os="$(lsb_release -sd)"
+wmname="$(xprop -id $(xprop -root -notype | awk '$1=="_NET_SUPPORTING_WM_CHECK:"{print $5}') -notype -f _NET_WM_NAME 8t | grep "WM_NAME" | cut -f2 -d \")"
+kernel="$(uname -r | cut -d '-' -f1)"
+resolution="$(xwininfo -root | grep geometry | awk '{print $2}' | cut -d + -f1)"
+shell=$(basename $SHELL)
 
-        Linux)
-			lsb_release -sd
-		;;
-	esac
-}
+# (\ /)
+# ( · ·)
+# c(")(")
 
-kernelv() {
-	case $osn in
-		Windows)
-			wmic os get Version | grep -E '[[:digit:]]'
-		;;
-
-		Linux*)
-			uname -r | cut -d '-' -f1
-		;;
-	esac
-}
-
-de() {
-	case $osn in
-		Windows)
-			case $(os) in
-				*"Windows 8"*) printf Metro ;;
-				*) printf Aero ;;
-			esac
-		;;
-	esac
-}
-
-wm() {
-	case $osn in
-		Windows)
-			wmn=$(tasklist | grep -m 2 -o -F \
-				-e bugn \
-				-e Windawesome \
-				-e blackbox \
-				-e litestep )
-			[[ $wmn == "blackbox" ]] && wmn="bbLean"
-			echo ${wmn:+$wmn, }Explorer
-		;;
-		Linux)
-			wmn="$(xprop -id $(xprop -root -notype | awk '$1=="_NET_SUPPORTING_WM_CHECK:"{print $5}') -notype -f _NET_WM_NAME 8t | grep "WM_NAME" | cut -f2 -d \")"
-			echo $wmn
-		;;
-	esac
-}
 # (\ /)
 # ( . .)
 # c(")(")
 
-bunny() {
 cat << EOF
-	    $c1$(title)$r
-	   $c2 OS $r$(os)
-   (\ /)   $c3 Kernel $r$(kernelv)
-   ( . .)  $c4 DE $r$(de)
-   c($c1"$r)($c1"$r) $c5 WM $r$(wm)
+            $c1$title$r
+           $c2 OS $r$os
+   (\ /)   $c3 Kernel $r$kernel
+   ( . .)  $c4 Shell $r$shell
+   c($c1"$r)($c1"$r) $c5 WM $r$wmname
 
-	    $(colors)$r
-	    $(colors z)$r
-	    
+            $(colors)$r
+            $(colors z)$r
+            
 EOF
-}
-
-get_os # Initially get the os for other functions
-bunny
