@@ -1,2 +1,2 @@
 #!/bin/sh
-install -Dm755 bunnyfetch.sh "$DESTDIR"/"${PREFIX:-/usr}"/bin/bunnyfetch
+install -Dm755 bunnyfetch "$DESTDIR"/"${PREFIX:-/usr}"/bin/bunnyfetch
