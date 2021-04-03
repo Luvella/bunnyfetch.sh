@@ -1,6 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 # Tiny colored fetch script
-# Requires Typicons Font to display the icons
 # elenapan @ github
 # Modified by TorchedSammy
 
@@ -12,32 +11,20 @@ for j in c cb; do
 done
 
 r=$'\e[0m'
-v=$'\e[7m'
-b=$'\e[1m'
 
 colors() {
-        if [ $1 ]; then
-                for i in {0..7}; do
-                        printf "\e[10${i}m   "
-                done
-        else
-                for i in {0..7}; do
-                        printf "\e[4${i}m   "
-                done
-        fi
+	for i in {0..7}; do
+		printf "\e[4${i}m   "
+	done
+	printf "$r\n            "
+	for i in {0..7}; do
+		printf "\e[10${i}m   "
+	done
 }
 
-title="$USER@$HOSTNAME"
-# Items
-sep=
-s=$d$f0$sep$t
-
-if type lsb_release >/dev/null 2>&1; then
-	os="$(lsb_release -si)"
-else
-	source /etc/os-release && os=$NAME
-fi
-#os="$(lsb_release -si || source /etc/os-release && echo $NAME)"
+source /etc/os-release && os=$NAME
+user="$USER"
+host="$(cat /etc/hostname)"
 wmname="$(xprop -id $(xprop -root -notype | awk '$1=="_NET_SUPPORTING_WM_CHECK:"{print $5}') -notype -f _NET_WM_NAME 8t | grep "WM_NAME" | cut -f2 -d \")"
 kernel="$(uname -r | cut -d '-' -f1)"
 shell=$(basename $SHELL)
@@ -51,13 +38,11 @@ shell=$(basename $SHELL)
 # c(")(")
 
 cat << EOF
-            $c1$title$r
+            $c1$user@$host$r
            $c2 OS $r$os
    (\ /)   $c3 Kernel $r$kernel
    ( . .)  $c4 Shell $r$shell
    c($c1"$r)($c1"$r) $c5 WM $r$wmname
 
             $(colors)$r
-            $(colors z)$r
-            
 EOF
